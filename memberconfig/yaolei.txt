@@ -1,0 +1,62 @@
+1.springMVC的架构原理？
+	答：dispatcherServlet接收到请求，转发请求给HandlerMapping，HandlerMapping找到Handler返回给dispatcherServlet，dispatcherServlet调用HandlerAdapter来执行Handler,
+	HandlerAdapter执行Handler返回ModelAndView给dispatcherServlet,dispatcherServlet调用ViewResolver来解析视图，返回View给dispatcherServlet,dispatcherServlet渲染视图，
+	把模型数据填充到request域中，响应结果。
+
+2.HashMap的源码，实现原理，JDK8中对HashMap做了怎样的优化？
+	答：HashMap底层是一个entry数组+链表结构，初始容量为16，当使用容量大于0.75时，自动扩容2的n次方幂；jdk8中当链表长度大于8时，为了防止哈希表碰撞，转为红黑树，提高map效率。
+	
+3.HaspMap扩容是怎样扩容的，为什么都是2的N次幂的大小？
+	答：当使用容量大于0.75时，自动扩容2的n次方幂；如果length为2的n次幂，那么length-1转二进制为111111... 在与hashCode进行与操作时，操作效率非常高，不会浪费空间，反之则会浪费空间，减慢查询效率。
+	
+4.HashMap，HashTable，ConcurrentHashMap的区别？
+	答：HashMap允许null键null值，是线程不安全的，多线程环境下需要手动实现同步机制，HashTable不允许null键null值，是线程安全的。HashMap效率比HashTable的要高。
+	concurrentHashMap线程安全，不允许null键null值。
+	
+5.HashMap在高并发下如果没有处理线程安全会有怎样的安全隐患，具体表现是什么？
+	答：使用put时，可能导致get会无限循环，具体表现是cpu使用率100%。
+	
+6.抽象类与接口的区别？
+	答：抽象类可以有非抽象方法，接口没有，抽象类有构造方法，接口没有，抽象类只能单继承，接口可以多实现。jdk8以后接口可以有default方法和static方法。抽象类比接口快。
+	
+7.两种动态代理方式，以及区别。
+	答：jdk动态代理只能对实现了接口的类进行代理，而cglig动态代理能够对任意类进行代理，原理是对目标对象进行继承代理，如果目标对象被final修饰，那么该类无法被cglib代理。
+	
+8.Java序列化的方式？
+	答：原生流的序列化，jackson序列化，fastjson序列化。
+	
+9.一个ArrayList在循环过程中删除，会不会出问题，为什么？
+	答：会出现问题，删除的过程中指针会移动，会导致有些元素没被删除，会导致java.util.ConcurrentModificationException。
+	
+10.@transactional注解在什么情况下会失效，为什么？
+	答：对private、default、protected方法无效。
+
+11.spring中用到的设计模式？
+	答：Aop--适配器模式，Beanfactory--工厂模式，定义bean--单例模式。
+	
+12.常用的rpc远程调用框架？
+	答：HttpClient、SpringCloud、Dubbo、Grpc等。
+	
+13.xml与json区别？
+	答：xml更加占用宽带。微服务使用json作用数据传输格式，而soa底层使用重量级的xml作为数据传输格式。
+
+14.谈谈Eureka的自我保护机制？
+	答：在一定时间内（默认90s），如果EurekaServer端没有收到EurekaClient发送的心跳包，就会剔除该EurekaClient。
+	自我保护机制：如果在短时间内大量丢失EurekaClient的心跳包，就会开启自我保护机制，不剔除EurekaClient，为了防止EurekaClient是正常运行的，但是
+	只是与EurekaServer网络不通而误将他剔除。
+15.zookeeper有自我保护机制吗？
+	答：没有。
+	
+16.待办事项：改简历，个人优势、springcloud，学习阿里巴巴编码规范（eclipse集成插件），以及面试课堂
+
+17.ribbon本地负载均衡的原理：
+	答：客户端总请求数%服务器数量，等于注册中心上服务器集群集合中的下标。
+	
+18.ribbon本地负载均衡与nginx负载均衡的区别？
+	答：ribbon是客户端负载均衡，调用接口的时候，从注册中心上获取服务信息，缓存在jvm本地，然后通过本地的rpc调用技术调用远程接口。
+		nginx是客户端所有请求都发送给nginx,然后nginx转发请求给服务器，实现服务器端的负载均衡。
+		
+19.什么是服务降级和服务熔断？
+	答：服务降级：高并发情况下，防止用户一直等待，对用户进行友好提示，不会立即处理请求，调用本地fallback方法。服务熔断：设定一个阈值，当访问流量达到这个阈值时，开启服务降级功能，对用户进行友好提示。
+
+	
